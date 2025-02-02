@@ -97,20 +97,7 @@ export class MgekoExtension implements MgekoImplementation {
       title: "Sort By Filter",
     });
 
-    const searchTags = await this.getGenreTags();
-
-    for (const tags of searchTags) {
-      Application.registerSearchFilter({
-        type: "multiselect",
-        options: tags.tags.map((x) => ({ id: x.id, value: x.title })),
-        id: tags.id,
-        allowExclusion: true,
-        title: tags.title,
-        value: {},
-        allowEmptySelection: true,
-        maximum: undefined,
-      });
-    }
+    void this.registerGenreTags();
   }
 
   async getDiscoverSections(): Promise<DiscoverSection[]> {
@@ -181,13 +168,33 @@ export class MgekoExtension implements MgekoImplementation {
     return parseGenreTags($);
   }
 
+  async registerGenreTags(): Promise<void> {
+    const searchTags = await this.getGenreTags();
+
+    for (const tags of searchTags) {
+      Application.registerSearchFilter({
+        type: "multiselect",
+        options: tags.tags.map((x) => ({ id: x.id, value: x.title })),
+        id: tags.id,
+        allowExclusion: true,
+        title: tags.title,
+        value: {},
+        allowEmptySelection: true,
+        maximum: undefined,
+      });
+    }
+  }
+
   async getMangaDetails(mangaId: string): Promise<SourceManga> {
     const request: Request = {
-      url: `${MGEKO_DOMAIN}/manga/${mangaId}`,
+      url: new URLBuilder(MGEKO_DOMAIN)
+        .addPath("manga")
+        .addPath(mangaId)
+        .build(),
       method: "GET",
     };
     const $ = await this.fetchCheerio(request);
-    return parseMangaDetails($, mangaId);
+    return parseMangaDetails($, mangaId, MGEKO_DOMAIN);
   }
 
   async getChapters(sourceManga: SourceManga): Promise<Chapter[]> {
