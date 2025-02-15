@@ -1,8 +1,8 @@
 import { ContentRating, SourceInfo, SourceIntents } from "@paperback/types";
 
 export default {
-  name: "Manganelo",
-  description: "Extension that pulls content from m.manganelo.com.",
+  name: "Manganato",
+  description: "Extension that pulls content from https://manganato.com.",
   version: "1.1.0",
   icon: "icon.png",
   language: "en",
@@ -61,7 +61,7 @@ export default {
   ],
   developers: [
     {
-      name: "Karrot",
+      name: "YME",
     },
   ],
 } satisfies SourceInfo;
