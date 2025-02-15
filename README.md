@@ -15,7 +15,7 @@ Paperback extensions for websites with unique, non-generic/template layouts.
 
 ## Installation
 
-Add this repository to Paperback through [this link](https://paperback-community.github.io/general-extensions).
+Add this repository to Paperback through [this link]([https://paperback-community.github.io/general-extensions](https://github.com/senorYME/general-extensions)).
 
 ## Contributing
 
