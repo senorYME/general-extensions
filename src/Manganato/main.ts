@@ -22,17 +22,17 @@ import {
 import * as cheerio from "cheerio";
 import { CheerioAPI } from "cheerio";
 import { URLBuilder } from "../utils/url-builder/base";
-import { NeloInterceptor } from "./ManganeloInterceptor";
+import { NeloInterceptor } from "./ManganatoInterceptor";
 
-const baseUrl = "https://m.manganelo.com";
+const baseUrl = "https://manganato.com";
 
-type MangaNeloImplementation = Extension &
+type MangaNatoImplementation = Extension &
   SearchResultsProviding &
   MangaProviding &
   ChapterProviding &
   DiscoverSectionProviding;
 
-export class MangaNeloExtension implements MangaNeloImplementation {
+export class MangaNatoExtension implements MangaNatoImplementation {
   requestManager = new NeloInterceptor("main");
 
   async initialise(): Promise<void> {
@@ -169,9 +169,9 @@ export class MangaNeloExtension implements MangaNeloImplementation {
     metadata: { page?: number } | undefined,
   ): Promise<PagedResults<SearchResultItem>> {
     const page = metadata?.page ?? 1;
-    // Example URL: https://m.manganelo.com/advanced_search?s=all&page=1&keyw=it_starts_with_a_kingpin_account
-    // With Genres: https://m.manganelo.com/advanced_search?s=all&g_i=_2_3_4_6_7_&page=1&keyw=it_starts_with_a_kingpin_account
-    // With Status: https://m.manganelo.com/advanced_search?s=all&g_i=_2_3_4_6_7_&sts=completed&page=1&keyw=it_starts_with_a_kingpin_account
+    // Example URL: https://manganato.com/advanced_search?s=all&page=1&keyw=it_starts_with_a_kingpin_account
+    // With Genres: https://manganato.com/advanced_search?s=all&g_i=_2_3_4_6_7_&page=1&keyw=it_starts_with_a_kingpin_account
+    // With Status: https://manganato.com/advanced_search?s=all&g_i=_2_3_4_6_7_&sts=completed&page=1&keyw=it_starts_with_a_kingpin_account
 
     // Covert the title to format
     query.title = query.title
@@ -269,7 +269,7 @@ export class MangaNeloExtension implements MangaNeloImplementation {
   }
 
   async getMangaDetails(mangaId: string): Promise<SourceManga> {
-    // Example URL: https://m.manganelo.com/manga-af123456
+    // Example URL: https://manganato.com/manga-af123456
     const request = { url: `${mangaId}`, method: "GET" };
 
     const $ = await this.fetchCheerio(request);
@@ -359,7 +359,7 @@ export class MangaNeloExtension implements MangaNeloImplementation {
       const li = $(element);
       const link = li.find("a.chapter-name");
       const href = link.attr("href") || "";
-      //const chapterId = href.replace("https://chapmanganelo.com", "");
+      //const chapterId = href.replace("https://chapMangaNato.com", "");
       const chapterId = href;
       const title = link.attr("title")?.trim() || link.text().trim();
 
@@ -409,7 +409,7 @@ export class MangaNeloExtension implements MangaNeloImplementation {
       const errorContext = {
         error: errorDetails,
         stack: errorStack,
-        source: "MangaNeloExtension.getChapterDetails",
+        source: "MangaNatoExtension.getChapterDetails",
         chapterId: chapter.chapterId,
         mangaId: chapter.sourceManga.mangaId,
         requestUrl: `${chapter.chapterId}`,
@@ -451,7 +451,7 @@ export class MangaNeloExtension implements MangaNeloImplementation {
       const infoLink = unit.find(".genres-item-name");
       const title = infoLink.text().trim();
       const image = unit.find(".genres-item-img img").attr("src") || "";
-      // Example URL: https://m.manganelo.com/manga-af123456
+      // Example URL: https://manganato.com/manga-af123456
       const mangaId = infoLink.attr("href");
       const chapterText = unit.find(".genres-item-chap").text().trim() || "";
       const chapterMatch = chapterText.match(/Chapter\s+(\d+(\.\d+)?)/i);
@@ -505,7 +505,7 @@ export class MangaNeloExtension implements MangaNeloImplementation {
       const infoLink = unit.find(".genres-item-name");
       const title = infoLink.text().trim();
       const image = unit.find(".genres-item-img img").attr("src") || "";
-      // Example URL: https://m.manganelo.com/manga-af123456
+      // Example URL: https://manganato.com/manga-af123456
       const mangaId = infoLink.attr("href");
 
       if (title && mangaId && !collectedIds.includes(mangaId)) {
@@ -555,7 +555,7 @@ export class MangaNeloExtension implements MangaNeloImplementation {
       const infoLink = unit.find(".genres-item-name");
       const title = infoLink.text().trim();
       const image = unit.find(".genres-item-img img").attr("src") || "";
-      // Example URL: https://m.manganelo.com/manga-af123456
+      // Example URL: https://manganato.com/manga-af123456
       const mangaId = infoLink.attr("href");
       const chapterText = unit.find(".genres-item-chap").text().trim() || "";
       const chapterMatch = chapterText.match(/Chapter\s+(\d+(\.\d+)?)/i);
@@ -680,4 +680,4 @@ function createDiscoverSectionItem(options: {
   };
 }
 
-export const Manganelo = new MangaNeloExtension();
+export const MangaNato = new MangaNatoExtension();
